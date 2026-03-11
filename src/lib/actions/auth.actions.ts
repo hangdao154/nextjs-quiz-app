@@ -15,12 +15,6 @@ export async function registerAction(formData: TRegisterInput) {
     throw new Error(
       `Validation failed: ${Object.keys(fieldErrors).join(', ')}`
     );
-    // return errorResponse(
-    //   {
-    //     fieldErrors,
-    //   },
-    //   `Validation failed: ${Object.keys(fieldErrors).join(', ')}`
-    // );
   }
 
   try {

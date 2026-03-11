@@ -1,10 +1,13 @@
-import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { db, users } from '@/db';
 import { TLoginInput, TRegisterInput } from '@/types';
-import { getSessionPayload, loginSchema, registerSchema } from '@/lib';
-import { STORAGE_KEYS } from '@/constants';
+import {
+  deleteSession,
+  getSessionPayload,
+  loginSchema,
+  registerSchema,
+} from '@/lib';
 
 export type AuthUser = typeof users.$inferSelect;
 
@@ -30,7 +33,7 @@ export default class AuthService {
         name: data.name,
         passwordHash,
       })
-      .returning();
+      .returning({ id: users.id });
 
     return user;
   };
@@ -57,15 +60,14 @@ export default class AuthService {
   };
 
   static logout = async () => {
-    const cookieStore = await cookies();
-    cookieStore.delete(STORAGE_KEYS.AUTH_TOKEN);
+    await deleteSession();
   };
 
   static getCurrentUser = async () => {
     const payload = await getSessionPayload();
     if (!payload) return null;
 
-    const userId = payload.sub;
+    const userId = payload;
     const [user] = await db.select().from(users).where(eq(users.id, userId));
     return user ?? null;
   };

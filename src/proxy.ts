@@ -1,29 +1,27 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { STORAGE_KEYS } from './constants';
+import { decrypt } from './lib';
 
 const PUBLIC_PATHS = [
   '/login',
   '/register',
-  '/api/auth/login',
-  '/api/auth/register',
   // Allow MSW service worker script to load without auth redirect.
   '/mockServiceWorker.js',
 ];
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const token = req.cookies.get(STORAGE_KEYS.AUTH_TOKEN)?.value;
-
   const path = req.nextUrl.pathname;
-
   const isPublicRoute = PUBLIC_PATHS.includes(path);
+  const isAuthenticated = !!(token ? await decrypt(token) : null);
 
-  if (!isPublicRoute && !token) {
+  if (!isPublicRoute && !isAuthenticated) {
     const loginUrl = new URL('/login', req.url);
     loginUrl.searchParams.set('redirect', path);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isPublicRoute && token) {
+  if (isPublicRoute && isAuthenticated) {
     return NextResponse.redirect(new URL('/', req.url));
   }
 
