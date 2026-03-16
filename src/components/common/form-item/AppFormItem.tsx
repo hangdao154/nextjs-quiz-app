@@ -10,6 +10,7 @@ interface IFormItemProps<T extends FieldValues> {
   children: ReactNode;
   label?: ReactNode;
   description?: ReactNode;
+  classWrapper?: string;
 }
 
 const AppFormItem = <T extends FieldValues>({
@@ -18,13 +19,14 @@ const AppFormItem = <T extends FieldValues>({
   children,
   label,
   description,
+  classWrapper,
 }: IFormItemProps<T>) => {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
+        <Field data-invalid={fieldState.invalid} className={classWrapper}>
           {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
           {Children.map(children, (child) => {
             if (isValidElement(child)) {
