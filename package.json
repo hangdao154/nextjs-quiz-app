@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "prepare": "husky",
     "test": "vitest --watch",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
