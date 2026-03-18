@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components';
 import { getQuizzes, startQuiz } from '@/lib';
-import { ExploreCommunity, MyLibrary } from '@/modules/quiz';
-import { Activity, Library, PenTool } from 'lucide-react';
+import { ExploreCommunity, MyLibrary, RecentActivities } from '@/modules/quiz';
+import { Library, PenTool } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -32,7 +32,7 @@ export default async function Home() {
       title: 'Create Flashcards',
       description: 'Master any subject with AI-powered rapid memory cards.',
       icon: <Library className="h-6 w-6 text-black group-hover:text-white" />,
-      href: '/flashcards/create',
+      href: '/flashcard/create',
     },
   ];
 
@@ -50,9 +50,9 @@ export default async function Home() {
       <section className="mb-8 grid grid-cols-2 gap-6">
         {actions.map((item) => (
           <Link href={item.href} key={item.title}>
-            <Card className="group cursor-pointer border-2 border-lime-800/10 bg-transparent bg-linear-to-br from-lime-800/10 to-lime-800/60 p-5 text-white transition-colors **:transition-colors hover:border-lime-500 hover:bg-lime-400">
+            <Card className="group border-primary-60 from-primary/0 to-primary/40 hover:border-primary hover:bg-primary cursor-pointer border-2 bg-transparent bg-linear-to-br p-5 text-white ring-0 transition-colors **:transition-colors">
               <CardContent className="flex gap-5 p-0">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-[#B1F041] group-hover:bg-black">
+                <div className="bg-primary mb-6 flex h-12 w-12 items-center justify-center rounded-lg group-hover:bg-black">
                   {item.icon}
                 </div>
                 <div>
@@ -69,46 +69,14 @@ export default async function Home() {
         ))}
       </section>
 
-      {/* Grid Layout for the rest of the content */}
+      {/* Dashboard Section */}
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
-        {/* Left/Main Column (takes up 2 spans) */}
         <div className="space-y-8 xl:col-span-2">
-          {/* My Library Section */}
           <MyLibrary />
-
-          {/* Explore Community Section */}
           <ExploreCommunity />
         </div>
-
-        {/* Right Column (Sidebar-ish) */}
         <div className="space-y-8">
-          {/* Recent Activity */}
-          <section>
-            <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
-              <Activity className="h-5 w-5 text-white" />
-              Recent Activity
-            </h2>
-            <div className="rounded-xl border border-white/5 bg-[#1C2118] p-6">
-              {/* Stats Grid */}
-              <div className="mb-6 grid grid-cols-2 border-b border-white/5 pb-6">
-                <div>
-                  <div className="text-3xl font-bold text-[#B1F041]">84%</div>
-                  <div className="mt-1 text-xs font-bold tracking-wider text-zinc-500">
-                    AVG. ACCURACY
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold">12</div>
-                  <div className="mt-1 text-xs font-bold tracking-wider text-zinc-500">
-                    QUIZZES COMPLETED
-                  </div>
-                </div>
-              </div>
-              {/* List of recent scores goes here */}
-            </div>
-          </section>
-
-          {/* Promo Card */}
+          <RecentActivities />
           <div className="rounded-xl bg-[#B1F041] p-6 text-black">
             <h3 className="mb-2 text-xl font-bold">Upgrade to Elite</h3>
             <p className="mb-4 text-sm font-medium opacity-80">

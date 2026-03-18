@@ -6,3 +6,4 @@ export { default as Sonner } from './sonner';
 export * from './field';
 export * from './card';
 export * from './carousel';
+export * from './popover';
