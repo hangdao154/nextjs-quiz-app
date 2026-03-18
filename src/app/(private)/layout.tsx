@@ -1,4 +1,5 @@
-import { Sidebar, Topbar } from '@/components';
+import Sidebar from '@/components/layout/sidebar';
+import Topbar from '@/components/layout/topbar';
 import { FC, ReactNode } from 'react';
 
 const PrivateLayout: FC<{ children: ReactNode }> = ({ children }) => {

@@ -6,14 +6,16 @@ import {
   BarChart2,
   Settings,
   MoreVertical,
+  LogOut,
 } from 'lucide-react';
-import { Button } from '@/components';
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@/components';
 import Image from 'next/image';
 import { FC } from 'react';
+import { AuthService } from '@/service';
+import { logoutAction } from '@/lib';
 
-const Sidebar: FC = () => {
-  const avatar =
-    'https://scontent.fhan2-5.fna.fbcdn.net/v/t39.30808-6/535330314_1301068191694365_8513639196053862897_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeH_WsRNz6OjQv2xdjaAGN9E0Lj-rCPd2-HQuP6sI93b4SdOFShDXicj_ApJX0gcmu9hSDJUSdMVuJMLE382LiHT&_nc_ohc=V0eXR7oUOfUQ7kNvwHHXRDH&_nc_oc=AdnJILBCoO0QsSGcsejkwfkzvW0nj07WlKukJKnOlU_AqTuzu4E_UF-0YnsE0bKk-uVagoWV88GBQCCF5nlmqJaF&_nc_zt=23&_nc_ht=scontent.fhan2-5.fna&_nc_gid=zL2XZwgiep3TpnPMs0KsOA&_nc_ss=8&oh=00_AfxqmiBJH2NbQoJuKhSAvTmEePdb_rrPAwZ0--UnM8nJFw&oe=69B857A3';
+const Sidebar: FC = async () => {
+  const user = await AuthService.getCurrentUser();
 
   return (
     <aside className="sticky top-0 flex h-screen w-64 flex-col justify-between border-r border-white/5 bg-[#11130e] p-4">
@@ -76,24 +78,51 @@ const Sidebar: FC = () => {
       <div className="flex items-center justify-between rounded-xl border border-white/5 bg-[#1C2118] p-3">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-md border border-white/10 bg-lime-200 text-center">
-            {avatar ? (
-              <Image src={avatar} alt="Avatar" width={36} height={36} />
+            {user?.avatar ? (
+              <Image src={user.avatar} alt="Avatar" width={36} height={36} />
             ) : (
-              <span className="text-xl font-black text-black">KM</span>
+              <span className="text-xl font-black text-black">
+                {user?.name
+                  ? user.name
+                      .split(' ')
+                      .map((name) => name[0])
+                      .join('')
+                  : 'G'}
+              </span>
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-white">Kim My</span>
+            <span className="text-sm font-medium text-white">
+              {user?.name ?? 'Guest'}
+            </span>
             <span className="text-xs text-[#B1F041]">Pro Member</span>
           </div>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-zinc-400 hover:text-white"
-        >
-          <MoreVertical className="h-4 w-4" />
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              size="icon"
+              className="hover:bg-primary-80 h-8 w-8 bg-transparent text-zinc-400 hover:text-white"
+            >
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-fit">
+            <form action={logoutAction}>
+              <Button
+                type="submit"
+                className="hover:text-primary w-full justify-start bg-transparent text-white"
+              >
+                <LogOut className="mr-3 h-5 w-5 stroke-2" />
+                Logout
+              </Button>
+            </form>
+            <Button className="hover:text-primary w-full justify-start bg-transparent text-white">
+              <Settings className="mr-3 h-5 w-5 stroke-2" />
+              Settings
+            </Button>
+          </PopoverContent>
+        </Popover>
       </div>
     </aside>
   );
