@@ -4,10 +4,21 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
 import { quizSchema } from '@/lib';
-import { AppFormItem, Input, Textarea } from '@/components';
+import { AppFormItem, Button, FieldError, Input, Textarea } from '@/components';
 import { QuestionCard, QuizSidebar } from '@/modules/quiz';
-import { TQuizFormValues } from '@/types';
+import { TQuizFormValues, TQuizQuestion } from '@/types';
 import { toast } from 'sonner';
+
+const DEFAULT_QUESTION_VALUES: TQuizQuestion = {
+  text: '',
+  type: 'Multiple Choice',
+  options: [
+    { text: '', isCorrect: true },
+    { text: '', isCorrect: false },
+    { text: '', isCorrect: false },
+    { text: '', isCorrect: false },
+  ],
+};
 
 export default function CreateQuizView() {
   const form = useForm<TQuizFormValues>({
@@ -18,18 +29,7 @@ export default function CreateQuizView() {
       timeLimit: '20m',
       shuffle: true,
       showResults: false,
-      questions: [
-        {
-          text: '',
-          type: 'Multiple Choice',
-          options: [
-            { text: '', isCorrect: true },
-            { text: '', isCorrect: false },
-            { text: '', isCorrect: false },
-            { text: '', isCorrect: false },
-          ],
-        },
-      ],
+      questions: [DEFAULT_QUESTION_VALUES],
     },
   });
 
@@ -40,14 +40,20 @@ export default function CreateQuizView() {
     name: 'questions',
   });
 
+  const questionsState = form.getFieldState('questions');
+
   const onSubmit = handleSubmit((data) => {
     toast.success('Quiz Created: ' + JSON.stringify(data));
   });
 
+  const handleAppenQuestion = () => {
+    append(DEFAULT_QUESTION_VALUES);
+  };
+
   return (
     <form
       onSubmit={onSubmit}
-      className="flex min-h-screen gap-8 bg-[#11130e] p-8 text-white"
+      className="flex min-h-screen gap-8 p-8 text-white"
     >
       {/* Main Content Area */}
       <div className="max-w-4xl flex-1 space-y-8">
@@ -63,14 +69,14 @@ export default function CreateQuizView() {
           <AppFormItem name="title" control={control} label="Quiz Title">
             <Input
               placeholder="e.g. Advanced Quantum Mechanics"
-              className="border-[#2A3322] bg-[#1C2118] text-white focus-visible:ring-[#B1F041]"
+              className="dark:bg-primary-800 border-border py-5"
             />
           </AppFormItem>
 
           <AppFormItem control={control} name="description" label="Description">
             <Textarea
               placeholder="Briefly describe what this quiz covers..."
-              className="min-h-25 border-[#2A3322] bg-[#1C2118] text-white focus-visible:ring-[#B1F041]"
+              className="dark:bg-primary-800 border-border min-h-25 text-white"
             />
           </AppFormItem>
         </div>
@@ -78,10 +84,14 @@ export default function CreateQuizView() {
         <div className="pt-4">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold">Questions</h2>
-            <div className="rounded-full bg-[#2A3322] px-3 py-1 text-xs font-bold text-[#B1F041]">
+            <div className="bg-primary-80 text-primary rounded-full px-3 py-1 text-xs font-bold">
               Total: {fields.length}
             </div>
           </div>
+
+          {questionsState.invalid && (
+            <FieldError errors={[questionsState.error]} className="mb-4" />
+          )}
 
           <div className="space-y-6">
             {fields.map((field, index) => (
@@ -94,53 +104,34 @@ export default function CreateQuizView() {
             ))}
 
             {/* Add Question Button */}
-            <button
+            <Button
               type="button"
-              onClick={() =>
-                append({
-                  text: '',
-                  type: 'Multiple Choice',
-                  options: [
-                    { text: '', isCorrect: false },
-                    { text: '', isCorrect: false },
-                    { text: '', isCorrect: false },
-                    { text: '', isCorrect: false },
-                  ],
-                })
-              }
-              className="flex h-32 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#2A3322] text-zinc-500 transition-all hover:border-zinc-400 hover:bg-[#1C2118] hover:text-white"
+              variant="outline"
+              onClick={handleAppenQuestion}
+              className="dark:border-primary/20 dark:hover:border-primary dark:bg-primary/5 group dark:hover:bg-primary/20 flex h-32 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed text-zinc-500 transition-all"
             >
-              <div className="mb-2 rounded-full border border-[#2A3322] bg-[#1C2118] p-2">
-                <Plus className="h-5 w-5 text-zinc-400" />
+              <div className="border-border bg-primary-80 group-hover:border-primary/20 group-hover:bg-primary-40 mb-2 rounded-full border p-2 transition-colors">
+                <Plus className="h-5 w-5 text-zinc-400 transition-colors group-hover:text-white" />
               </div>
               <span className="text-sm font-semibold">ADD NEW QUESTION</span>
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Footer Actions */}
         <div className="flex items-center justify-between border-t border-[#2A3322] pt-8">
-          <button
+          <Button
             type="button"
-            // variant="outline"
-            className="border-[#2A3322] bg-transparent text-white hover:bg-[#2A3322]"
+            variant="outline"
+            className="text-primary border-dashed"
           >
             Save as Draft
-          </button>
+          </Button>
           <div className="flex items-center gap-4">
-            <button
-              type="button"
-              //   variant="ghost"
-              className="text-zinc-400 hover:text-white"
-            >
+            <Button type="button" variant="secondary">
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-[#B1F041] px-8 font-bold text-black hover:bg-[#9de02b]"
-            >
-              Publish Quiz
-            </button>
+            </Button>
+            <Button type="submit">Publish Quiz</Button>
           </div>
         </div>
       </div>

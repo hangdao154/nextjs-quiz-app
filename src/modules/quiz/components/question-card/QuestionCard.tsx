@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Trash2, Check, Circle } from 'lucide-react';
 import { TQuizFormValues } from '@/types';
-import { AppFormItem, Input } from '@/components';
+import { AppFormItem, Button, Input } from '@/components';
 import { cn } from '@/lib';
 
 interface IQuestionCardProps {
@@ -30,23 +30,24 @@ const QuestionCard: FC<IQuestionCardProps> = ({ index, remove, form }) => {
   const watchQuestion = form.watch(`questions.${index}`);
 
   return (
-    <div className="group relative rounded-xl border border-[#2A3322] bg-[#1C2118] p-6">
+    <div className="group bg-primary-800 border-border relative rounded-xl border p-6">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div
-            className={`flex h-6 w-6 items-center justify-center rounded text-xs font-bold ${isCompleted ? 'bg-[#B1F041] text-black' : 'bg-[#2A3322] text-zinc-400'}`}
+            className={`flex h-6 w-6 items-center justify-center rounded-sm text-xs font-bold ${isCompleted ? 'bg-primary text-black' : 'bg-primary/20 text-zinc-400'}`}
           >
             {index + 1}
           </div>
           <span className="font-bold text-white">Multiple Choice</span>
         </div>
-        <button
+        <Button
           type="button"
+          variant="link"
           onClick={() => remove(index)}
-          className="text-zinc-500 transition-colors hover:text-red-400"
+          className="p-0 text-zinc-500 transition-colors hover:text-red-400"
         >
-          <Trash2 className="h-5 w-5" />
-        </button>
+          <Trash2 className="size-5" />
+        </Button>
       </div>
 
       <div className="space-y-6">
@@ -57,7 +58,7 @@ const QuestionCard: FC<IQuestionCardProps> = ({ index, remove, form }) => {
         >
           <Input
             placeholder="Enter your question here..."
-            className="border-[#2A3322] bg-[#11130e] text-white focus-visible:ring-[#B1F041]"
+            className="dark:bg-accent-foreground border-zinc-700 py-5 text-white"
           />
         </AppFormItem>
 
@@ -74,8 +75,8 @@ const QuestionCard: FC<IQuestionCardProps> = ({ index, remove, form }) => {
                   <Input
                     placeholder={`Option ${String.fromCharCode(65 + optIndex)}`}
                     className={cn(
-                      'bg-[#11130e] py-5 pl-10 text-white transition-colors focus-visible:ring-0',
-                      isCorrect ? 'border-[#B1F041]' : 'border-[#2A3322]'
+                      'dark:bg-accent-foreground py-5 pl-10 text-white transition-colors focus-visible:ring-0',
+                      isCorrect ? 'border-[#B1F041]' : 'border-zinc-700'
                     )}
                   />
                   <button
@@ -97,6 +98,13 @@ const QuestionCard: FC<IQuestionCardProps> = ({ index, remove, form }) => {
           })}
         </div>
       </div>
+
+      <span
+        className={cn(
+          'absolute top-3 -left-3 h-10 w-1 rounded-[1px]',
+          isCompleted ? 'bg-primary' : 'bg-primary/20'
+        )}
+      />
     </div>
   );
 };

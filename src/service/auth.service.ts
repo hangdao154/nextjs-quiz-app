@@ -1,15 +1,13 @@
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { db, users } from '@/db';
-import { TLoginInput, TRegisterInput } from '@/types';
+import { IAuthUserDTO, TLoginInput, TRegisterInput } from '@/types';
 import {
   deleteSession,
   getSessionPayload,
   loginSchema,
   registerSchema,
 } from '@/lib';
-
-export type AuthUser = typeof users.$inferSelect;
 
 export default class AuthService {
   static register = async (input: TRegisterInput) => {
@@ -63,7 +61,7 @@ export default class AuthService {
     await deleteSession();
   };
 
-  static getCurrentUser = async () => {
+  static getCurrentUser = async (): Promise<IAuthUserDTO | null> => {
     const payload = await getSessionPayload();
     if (!payload) return null;
 

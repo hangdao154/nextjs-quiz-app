@@ -10,7 +10,7 @@ interface IQuizSidebarProps {
 
 const QuizSidebar: FC<IQuizSidebarProps> = ({ form }) => {
   return (
-    <aside className="sticky top-8 space-y-10">
+    <aside className="bg-primary-800 sticky top-24 space-y-10 rounded-xl p-6">
       {/* Quiz Settings */}
       <div>
         <h3 className="mb-6 text-xs font-bold tracking-widest text-zinc-500 uppercase">
@@ -25,7 +25,7 @@ const QuizSidebar: FC<IQuizSidebarProps> = ({ form }) => {
           </div>
 
           <AppFormItem control={form.control} name="shuffle" label="Shuffle">
-            <Switch className="data-[state=checked]:bg-[#B1F041] data-[state=unchecked]:bg-[#B1F04150]" />
+            <Switch />
           </AppFormItem>
 
           <AppFormItem
@@ -33,7 +33,7 @@ const QuizSidebar: FC<IQuizSidebarProps> = ({ form }) => {
             name="showResults"
             label="Show Results"
           >
-            <Switch className="data-[state=checked]:bg-[#B1F041] data-[state=unchecked]:bg-[#B1F04150]" />
+            <Switch />
           </AppFormItem>
         </div>
       </div>
@@ -45,7 +45,7 @@ const QuizSidebar: FC<IQuizSidebarProps> = ({ form }) => {
         </h3>
         <button
           type="button"
-          className="flex h-32 w-full flex-col items-center justify-center rounded-xl border border-[#2A3322] bg-[#1C2118] text-zinc-500 transition-colors hover:border-zinc-400 hover:text-white"
+          className="bg-primary/5 hover:bg-primary/20 border-primary/20 hover:border-primary flex h-32 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed text-zinc-500 transition-colors hover:text-white"
         >
           <ImageIcon className="mb-2 h-6 w-6" />
           <span className="text-xs font-bold tracking-wider">UPLOAD COVER</span>
@@ -53,7 +53,7 @@ const QuizSidebar: FC<IQuizSidebarProps> = ({ form }) => {
       </div>
 
       {/* Pro Tip */}
-      <div className="rounded-xl border border-[#2A3322] bg-[#1a1f16] p-4">
+      <div className="bg-accent-foreground rounded-xl border border-zinc-700 p-4">
         <p className="mb-2 text-sm text-zinc-400 italic">
           &quot;Quality questions lead to quality insights.&quot;
         </p>
