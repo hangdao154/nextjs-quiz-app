@@ -5,6 +5,7 @@
     "ngClass",
     ".*Styles.*",
     ".*Classes.*",
-    ".*ClassName.*"
+    ".*ClassName.*",
+    "class.*"
   ]
 }

@@ -4,6 +4,7 @@ import { ExploreCommunity, MyLibrary, RecentActivities } from '@/modules/quiz';
 import { Library, PenTool } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
 export default async function Home() {
   const quizzes = await getQuizzes();
@@ -72,11 +73,17 @@ export default async function Home() {
       {/* Dashboard Section */}
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
         <div className="space-y-8 xl:col-span-2">
-          <MyLibrary />
-          <ExploreCommunity />
+          <Suspense fallback={<div>Loading Library...</div>}>
+            <MyLibrary />
+          </Suspense>
+          <Suspense fallback={<div>Loading Explore Community...</div>}>
+            <ExploreCommunity />
+          </Suspense>
         </div>
         <div className="space-y-8">
-          <RecentActivities />
+          <Suspense fallback={<div>Loading Recent Activities...</div>}>
+            <RecentActivities />
+          </Suspense>
           <div className="rounded-xl bg-[#B1F041] p-6 text-black">
             <h3 className="mb-2 text-xl font-bold">Upgrade to Elite</h3>
             <p className="mb-4 text-sm font-medium opacity-80">

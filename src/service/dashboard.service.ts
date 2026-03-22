@@ -25,7 +25,8 @@ export default class DashboardService {
 
   static async getUserLibraryQuizzes(
     userId: string,
-    limit = 5
+    limit = 5,
+    offset = 0
   ): Promise<IDashboardLibraryQuizDTO[]> {
     const rows = await db
       .select({
@@ -39,9 +40,24 @@ export default class DashboardService {
       .from(quizzes)
       .where(eq(quizzes.createdBy, userId))
       .orderBy(desc(quizzes.updatedAt))
+      .offset(offset)
       .limit(limit);
 
     return rows;
+  }
+
+  /**
+   * User-owned flashcard decks. Wire to a `flashcards` (or similar) table when available.
+   * Returns the same shape as library quizzes so `QuizCard` can render both.
+   */
+  static async getUserLibraryFlashcards(
+    _userId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _limit = 5,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _offset = 0
+  ): Promise<IDashboardLibraryQuizDTO[]> {
+    return [];
   }
 
   static async getCommunityQuizzes(

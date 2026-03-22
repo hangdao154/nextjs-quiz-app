@@ -1,3 +1,4 @@
+import { LENGTH_CONSTANTS } from '@/constants';
 import { z } from 'zod';
 
 export const startQuizSchema = z.object({
@@ -39,4 +40,22 @@ export const quizSchema = z.object({
   timeLimit: z.string().optional(),
   shuffle: z.boolean().default(false),
   showResults: z.boolean().default(false),
+  cover: z
+    .union([
+      z.string().min(1, 'Image String is required'),
+      z.instanceof(File, { message: 'Image File is required' }),
+    ])
+    .optional()
+    .refine(
+      (item) =>
+        typeof item === 'string' ||
+        (item instanceof File && item.type.startsWith('image/')),
+      'Only image files or strings are supported'
+    )
+    .refine(
+      (item) =>
+        typeof item === 'string' ||
+        (item instanceof File && item.size <= LENGTH_CONSTANTS.MAX_FILE_SIZE),
+      'Max image size is 2MB'
+    ),
 });

@@ -13,65 +13,52 @@ import Image from 'next/image';
 import { FC } from 'react';
 import { AuthService } from '@/service';
 import { logoutAction } from '@/lib';
+import NavLinks from '../nav-link';
+import Link from 'next/link';
+
+const NAV_ITEMS = [
+  {
+    label: 'Dashboard',
+    icon: <LayoutDashboard className="mr-3 h-5 w-5" />,
+    href: '/',
+  },
+  {
+    label: 'My Library',
+    icon: <BookOpen className="mr-3 h-5 w-5" />,
+    href: '/library',
+  },
+  {
+    label: 'Explore',
+    icon: <Compass className="mr-3 h-5 w-5" />,
+    href: '/explore',
+  },
+  {
+    label: 'Performance',
+    icon: <BarChart2 className="mr-3 h-5 w-5" />,
+    href: '/performance',
+  },
+];
 
 const Sidebar: FC = async () => {
   const user = await AuthService.getCurrentUser();
 
   return (
-    <aside className="sticky top-0 flex h-screen w-64 flex-col justify-between border-r border-white/5 bg-[#11130e] p-4">
+    <aside className="bg-primary-90 sticky top-0 flex h-screen w-64 flex-col justify-between border-r border-white/5 p-4">
       <div>
         {/* Logo */}
-        <div className="mb-8 flex items-center gap-2 px-2">
-          <div className="rounded-md bg-[#B1F041] p-1.5">
-            <Zap className="h-5 w-5 fill-black text-black" />
+        <Link href="/">
+          <div className="mb-8 flex items-center gap-2 px-2">
+            <div className="rounded-md bg-[#B1F041] p-1.5">
+              <Zap className="h-5 w-5 fill-black text-black" />
+            </div>
+            <span className="text-lg font-bold tracking-wide text-white">
+              QuizMaster
+            </span>
           </div>
-          <span className="text-lg font-bold tracking-wide text-white">
-            QuizMaster
-          </span>
-        </div>
+        </Link>
 
         {/* Navigation */}
-        <nav className="space-y-1">
-          <Button
-            variant="ghost"
-            className="w-full justify-start bg-[#B1F041] font-semibold text-black hover:bg-[#9de02b] hover:text-black"
-          >
-            <LayoutDashboard className="mr-3 h-5 w-5" />
-            Dashboard
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-zinc-400 hover:bg-white/5 hover:text-white"
-          >
-            <BookOpen className="mr-3 h-5 w-5" />
-            My Library
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-zinc-400 hover:bg-white/5 hover:text-white"
-          >
-            <Compass className="mr-3 h-5 w-5" />
-            Explore
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-zinc-400 hover:bg-white/5 hover:text-white"
-          >
-            <BarChart2 className="mr-3 h-5 w-5" />
-            Performance
-          </Button>
-
-          <div className="px-4 pt-6 pb-2 text-xs font-semibold tracking-wider text-zinc-600 uppercase">
-            Personal
-          </div>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-zinc-400 hover:bg-white/5 hover:text-white"
-          >
-            <Settings className="mr-3 h-5 w-5" />
-            Settings
-          </Button>
-        </nav>
+        <NavLinks items={NAV_ITEMS} />
       </div>
 
       {/* User Profile */}
