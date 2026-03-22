@@ -8,7 +8,7 @@
   --color-card: oklch(1 0 0);
   --color-card-foreground: oklch(0.145 0 0);
   --color-popover: var(--color-primary-800);
-  --color-popover-foreground: oklch(0.145 0 0);
+  --color-popover-foreground: oklch(1 0 0);
   --color-primary: oklch(0.8815 0.2067 127.67);
   --color-primary-20: oklch(0.7464 0.1733 127.45);
   --color-primary-40: oklch(0.6041 0.1386 127.46);
@@ -25,8 +25,8 @@
   --color-accent-foreground: oklch(0.205 0 0);
   --color-destructive: oklch(0.577 0.245 27.325);
   --color-destructive-foreground: oklch(0.985 0 0);
-  --color-border: oklch(0.922 0 0);
-  --color-input: oklch(0.922 0 0);
+  --color-border: var(--color-primary-80);
+  --color-input: oklch(0.2273 0.0294 128.86);
   --color-ring: oklch(0.708 0 0);
   --color-chart-1: oklch(0.646 0.222 41.116);
   --color-chart-2: oklch(0.6 0.118 184.704);

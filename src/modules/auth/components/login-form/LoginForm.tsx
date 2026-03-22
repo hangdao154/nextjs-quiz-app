@@ -19,7 +19,7 @@ const EmailInput: FC<React.ComponentProps<'input'>> = ({
     <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#c8d4b0]" />
     <Input
       className={cn(
-        'border-[#3a4830] bg-[#181f10] pl-9 text-[#c8d4b0] placeholder:text-[#4a5a3a]',
+        'border-[#3a4830] pl-9 text-[#c8d4b0] placeholder:text-[#4a5a3a]',
         className
       )}
       {...props}

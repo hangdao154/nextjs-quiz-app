@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Topbar: FC = () => {
   return (
-    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b border-white/5 bg-[#161913] px-8">
+    <header className="border-border bg-background sticky top-0 z-10 flex h-16 items-center justify-between border-b px-8">
       <div className="relative w-96">
         <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-zinc-500" />
         <Input

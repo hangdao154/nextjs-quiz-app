@@ -5,14 +5,17 @@ import { and, count, eq, inArray } from 'drizzle-orm';
 import { db } from '@/db/client';
 import { options, questions, quizzes, userAttempts } from '@/db/schema';
 import {
+  quizSchema,
   startQuizSchema,
   submitAnswersSchema,
 } from '@/lib/validations/quiz.validations';
-import { AuthService } from '@/service';
-import { TStartQuizInput, TSubmitAnswersInput } from '@/types';
+import { AuthService, QuizService } from '@/service';
+import { TQuizFormValues, TStartQuizInput, TSubmitAnswersInput } from '@/types';
 import { redirect } from 'next/navigation';
+import { successResponse } from '../utils';
+import { cache } from 'react';
 
-export async function getQuizzes() {
+export const getQuizzes = cache(async () => {
   const rows = await db
     .select({
       id: quizzes.id,
@@ -23,7 +26,7 @@ export async function getQuizzes() {
     .where(eq(quizzes.isActive, true));
 
   return rows;
-}
+});
 
 export async function startQuiz(rawInput: TStartQuizInput) {
   const input = startQuizSchema.parse(rawInput);
@@ -133,4 +136,30 @@ export async function submitAnswers(rawInput: TSubmitAnswersInput) {
     score,
     totalQuestions: attempt.totalQuestions,
   };
+}
+
+export async function createQuiz(formData: TQuizFormValues) {
+  const user = await AuthService.getCurrentUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+
+  const parsed = quizSchema.safeParse(formData);
+  if (!parsed.success) {
+    const { fieldErrors } = parsed.error.flatten();
+    throw new Error(
+      `Validation failed: ${Object.keys(fieldErrors).join(', ')}`
+    );
+  }
+
+  try {
+    const quiz = await QuizService.create(parsed.data, user.id);
+    return successResponse(quiz, 'Quiz created successfully!');
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : 'Unable to create quiz. Please try again.';
+    throw new Error(message);
+  }
 }

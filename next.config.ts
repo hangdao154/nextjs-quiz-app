@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Export static HTML into "out/" folder
   images: {
     remotePatterns: [
       {
