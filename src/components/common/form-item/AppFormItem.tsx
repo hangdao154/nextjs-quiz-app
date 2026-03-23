@@ -11,6 +11,7 @@ interface IFormItemProps<T extends FieldValues> {
   label?: ReactNode;
   description?: ReactNode;
   classWrapper?: string;
+  classLabel?: string;
 }
 
 const AppFormItem = <T extends FieldValues>({
@@ -20,6 +21,7 @@ const AppFormItem = <T extends FieldValues>({
   label,
   description,
   classWrapper,
+  classLabel,
 }: IFormItemProps<T>) => {
   return (
     <Controller
@@ -27,7 +29,11 @@ const AppFormItem = <T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={classWrapper}>
-          {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+          {label && (
+            <FieldLabel htmlFor={field.name} className={classLabel}>
+              {label}
+            </FieldLabel>
+          )}
           {Children.map(children, (child) => {
             if (isValidElement(child)) {
               // Element is HTML
