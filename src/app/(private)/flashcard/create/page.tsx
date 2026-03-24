@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Layers } from 'lucide-react';
 import { deckSchema } from '@/lib';
 import { TDeckFormValues } from '@/types';
-import { AppFormItem, Input, Textarea } from '@/components';
+import { AppFormItem, AppSelect, Button, Input, Textarea } from '@/components';
 import { Flashcard } from '@/modules/flashcard';
 import { toast } from 'sonner';
 
@@ -36,38 +36,35 @@ const CreateDeckForm: FC = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto min-h-screen max-w-5xl bg-[#11130e] p-8 text-white"
+      className="mx-auto min-h-screen w-full max-w-5xl p-8 text-white"
     >
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="mb-2 text-4xl font-bold">Create New Deck</h1>
-        <p className="text-[#899775]">
+        <p className="text-zinc-400">
           Organize your thoughts and start mastering new subjects.
         </p>
       </div>
 
       {/* Deck Metadata Form */}
-      <div className="mb-12 space-y-6 rounded-xl border border-[#2a3322] bg-[#151911] p-8">
+      <div className="border-border bg-primary-800 mb-12 space-y-6 rounded-xl border p-6">
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-2">
             <AppFormItem
               control={control}
               name="title"
-              label={
-                <span className="text-xs font-bold tracking-widest text-[#899775] uppercase">
-                  Deck Title
-                </span>
-              }
+              label="Deck Title"
+              classLabel="text-xs font-bold tracking-widest text-[#899775] uppercase"
             >
               <Input
                 placeholder="e.g. Molecular Biology - Unit 4"
-                className="border-[#2a3322] bg-[#1a1f16] text-white placeholder:text-zinc-600 focus-visible:ring-[#b1f041]"
+                className="dark:bg-accent-foreground border-zinc-700 py-5 text-white"
               />
             </AppFormItem>
           </div>
 
           <div className="col-span-1">
-            {/* <AppFormItem
+            <AppFormItem
               control={control}
               name="category"
               label={
@@ -76,18 +73,16 @@ const CreateDeckForm: FC = () => {
                 </span>
               }
             >
-              <Select>
-                <SelectTrigger className="border-[#2a3322] bg-[#1a1f16] text-white focus:ring-[#b1f041]">
-                  <SelectValue placeholder="Science" />
-                </SelectTrigger>
-                <SelectContent className="border-[#2a3322] bg-[#1a1f16] text-white">
-                  <SelectItem value="science">Science</SelectItem>
-                  <SelectItem value="languages">Languages</SelectItem>
-                  <SelectItem value="history">History</SelectItem>
-                </SelectContent>
-              </Select>
-            </AppFormItem> */}
-            <div>Category</div>
+              <AppSelect
+                options={[
+                  { label: 'Science', value: 'science' },
+                  { label: 'Languages', value: 'languages' },
+                  { label: 'History', value: 'history' },
+                ]}
+                placeholder="Science"
+                triggerClassName="dark:bg-accent-foreground border-zinc-700 py-5 text-white"
+              />
+            </AppFormItem>
           </div>
         </div>
 
@@ -95,15 +90,12 @@ const CreateDeckForm: FC = () => {
           <AppFormItem
             control={control}
             name="description"
-            label={
-              <span className="text-xs font-bold tracking-widest text-[#899775] uppercase">
-                Description
-              </span>
-            }
+            label="Description"
+            classLabel="text-xs font-bold tracking-widest text-[#899775] uppercase"
           >
             <Textarea
               placeholder="Briefly describe what this deck covers..."
-              className="min-h-30 resize-y border-[#2a3322] bg-[#1a1f16] text-white placeholder:text-zinc-600 focus-visible:ring-[#b1f041]"
+              className="dark:bg-accent-foreground min-h-25 border-zinc-700 text-white"
             />
           </AppFormItem>
         </div>
@@ -132,37 +124,29 @@ const CreateDeckForm: FC = () => {
           ))}
 
           {/* Add New Card Button */}
-          <button
+          <Button
+            variant="outline"
             type="button"
             onClick={() => append({ front: '', back: '' })}
-            className="group flex h-80 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#2a3322] text-[#899775] transition-all hover:border-[#b1f041]/50 hover:bg-[#151911] hover:text-[#b1f041]"
+            className="group dark:border-border dark:bg-primary-800/20 dark:hover:border-primary dark:hover:bg-primary-800 dark:hover:text-primary flex h-80 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed"
           >
-            <div className="mb-4 rounded-full bg-[#b1f041] p-3 text-black transition-transform group-hover:scale-110">
+            <div className="bg-primary mb-4 rounded-full p-3 text-black transition-transform group-hover:scale-110">
               <Plus className="h-6 w-6 stroke-3" />
             </div>
             <span className="mb-1 text-lg font-bold">Add New Card</span>
             <span className="text-xs font-semibold tracking-widest uppercase">
               To the stack
             </span>
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Footer Actions */}
       <div className="flex items-center justify-end gap-4 pb-12">
-        <button
-          type="button"
-          //   variant="outline"
-          className="border-[#2a3322] bg-transparent px-8 text-white hover:bg-[#1a1f16] hover:text-white"
-        >
+        <Button type="button" variant="secondary">
           Discard Draft
-        </button>
-        <button
-          type="submit"
-          className="bg-[#b1f041] px-10 font-bold text-black hover:bg-[#a3e635]"
-        >
-          Create Deck
-        </button>
+        </Button>
+        <Button type="submit">Create Deck</Button>
       </div>
     </form>
   );

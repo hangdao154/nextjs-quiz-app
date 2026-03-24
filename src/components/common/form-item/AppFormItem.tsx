@@ -1,6 +1,7 @@
 'use client';
 
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components';
+import { cn } from '@/lib';
 import { Children, cloneElement, isValidElement, ReactNode } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
@@ -30,7 +31,13 @@ const AppFormItem = <T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={classWrapper}>
           {label && (
-            <FieldLabel htmlFor={field.name} className={classLabel}>
+            <FieldLabel
+              htmlFor={field.name}
+              className={cn(
+                'font-bold tracking-widest text-[#899775] uppercase',
+                classLabel
+              )}
+            >
               {label}
             </FieldLabel>
           )}

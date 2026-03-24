@@ -28,9 +28,9 @@ const Flashcard: FC<IFlashcardProps> = ({ index, control, remove }) => {
         }`}
       >
         {/* ================= FRONT SIDE ================= */}
-        <div className="absolute inset-0 flex flex-col justify-between rounded-xl border border-[#b1f041]/30 bg-[#21281c] p-6 shadow-[0px_9px_16px_-3px_rgba(0,0,0,0.3)] backface-hidden">
+        <div className="border-primary-20 bg-primary-800 absolute inset-0 flex flex-col justify-between rounded-xl border p-6 shadow-[0px_9px_16px_-3px_rgba(0,0,0,0.3)] backface-hidden">
           <div className="mb-2 flex items-start justify-between">
-            <span className="rounded bg-[#b1f041] px-2 py-1 text-xs font-black tracking-widest text-black uppercase">
+            <span className="bg-primary rounded px-2 py-1 text-xs font-black tracking-widest text-black uppercase">
               Front #{padIndex(index)}
             </span>
             <div className="flex items-center gap-3 text-zinc-500">
@@ -70,7 +70,7 @@ const Flashcard: FC<IFlashcardProps> = ({ index, control, remove }) => {
             <button
               type="button"
               onClick={handleFlip}
-              className="text-xs font-bold tracking-widest text-[#899775] uppercase transition-colors hover:text-[#b1f041]"
+              className="hover:text-primary text-primary-40 cursor-pointer text-xs font-bold tracking-widest uppercase transition-colors"
             >
               Flip to edit back
             </button>
@@ -78,9 +78,9 @@ const Flashcard: FC<IFlashcardProps> = ({ index, control, remove }) => {
         </div>
 
         {/* ================= BACK SIDE ================= */}
-        <div className="absolute inset-0 flex transform-[rotateX(180deg)] flex-col justify-between rounded-xl border border-[#b1f041]/30 bg-[#21281c] p-6 shadow-[0px_9px_16px_-3px_rgba(0,0,0,0.3)] backface-hidden">
+        <div className="bg-primary-800 border-primary-60 absolute inset-0 flex transform-[rotateX(180deg)] flex-col justify-between rounded-xl border p-6 shadow-[0px_9px_16px_-3px_rgba(0,0,0,0.3)] backface-hidden">
           <div className="flex items-start justify-between">
-            <span className="rounded border border-[#b1f041]/30 bg-[#1a1f16] px-2 py-1 text-xs font-black tracking-widest text-[#b1f041] uppercase">
+            <span className="border-primary text-primary rounded border px-2 py-1 text-xs font-black tracking-widest uppercase">
               Back #{padIndex(index)}
             </span>
             <div className="flex items-center gap-3 text-zinc-500">
@@ -116,7 +116,7 @@ const Flashcard: FC<IFlashcardProps> = ({ index, control, remove }) => {
             <button
               type="button"
               onClick={handleFlip}
-              className="text-xs font-bold tracking-widest text-[#899775] uppercase transition-colors hover:text-[#b1f041]"
+              className="hover:text-primary text-primary-40 cursor-pointer text-xs font-bold tracking-widest uppercase transition-colors"
             >
               Flip to edit front
             </button>
