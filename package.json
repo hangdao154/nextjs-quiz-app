@@ -13,7 +13,8 @@
     "prepare": "husky",
     "test": "vitest --watch",
     "coverage": "vitest --coverage",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -56,6 +57,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.18",
     "bcryptjs": "^3.0.3",
+    "dotenv": "^17.3.1",
     "drizzle-kit": "^0.30.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
@@ -69,6 +71,7 @@
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18"

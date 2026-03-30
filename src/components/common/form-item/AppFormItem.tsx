@@ -1,6 +1,7 @@
 'use client';
 
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components';
+import { cn } from '@/lib';
 import { Children, cloneElement, isValidElement, ReactNode } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
@@ -12,6 +13,7 @@ interface IFormItemProps<T extends FieldValues> {
   description?: ReactNode;
   classWrapper?: string;
   classLabel?: string;
+  showError?: boolean;
 }
 
 const AppFormItem = <T extends FieldValues>({
@@ -22,6 +24,7 @@ const AppFormItem = <T extends FieldValues>({
   description,
   classWrapper,
   classLabel,
+  showError = true,
 }: IFormItemProps<T>) => {
   return (
     <Controller
@@ -30,7 +33,13 @@ const AppFormItem = <T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className={classWrapper}>
           {label && (
-            <FieldLabel htmlFor={field.name} className={classLabel}>
+            <FieldLabel
+              htmlFor={field.name}
+              className={cn(
+                'font-bold tracking-widest text-[#899775] uppercase',
+                classLabel
+              )}
+            >
               {label}
             </FieldLabel>
           )}
@@ -49,7 +58,9 @@ const AppFormItem = <T extends FieldValues>({
             return null;
           })}
           {description && <FieldDescription>{description}</FieldDescription>}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && showError && (
+            <FieldError errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

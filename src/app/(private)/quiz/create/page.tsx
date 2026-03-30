@@ -68,8 +68,8 @@ export default function CreateQuizView() {
       {/* Main Content Area */}
       <div className="flex-1 space-y-8">
         <div className="mx-auto max-w-4xl">
-          <div>
-            <h1 className="mb-2 text-3xl font-bold">Create New Quiz</h1>
+          <div className="mb-8">
+            <h1 className="mb-2 text-4xl font-bold">Create New Quiz</h1>
             <p className="text-zinc-400">
               Design your assessment by adding questions and defining correct
               answers.
@@ -130,12 +130,12 @@ export default function CreateQuizView() {
                 type="button"
                 variant="outline"
                 onClick={handleAppenQuestion}
-                className="dark:border-primary/20 dark:hover:border-primary dark:bg-primary/5 group dark:hover:bg-primary/20 flex h-32 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed text-zinc-500 transition-all"
+                className="group dark:border-border dark:bg-primary-800/20 dark:hover:border-primary dark:hover:bg-primary-800 dark:hover:text-primary flex h-32 w-full flex-col items-center justify-center rounded-xl border-2 border-dashed"
               >
-                <div className="border-border bg-primary-80 group-hover:border-primary/20 group-hover:bg-primary-40 mb-2 rounded-full border p-2 transition-colors">
-                  <Plus className="h-5 w-5 text-zinc-400 transition-colors group-hover:text-white" />
+                <div className="bg-primary mb-2 rounded-full p-2 text-black transition-transform group-hover:scale-110">
+                  <Plus className="h-5 w-5 stroke-3" />
                 </div>
-                <span className="text-sm font-semibold">ADD NEW QUESTION</span>
+                <span className="text-sm font-bold">Add New Question</span>
               </Button>
             </div>
           </div>

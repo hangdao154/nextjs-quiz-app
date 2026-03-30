@@ -30,17 +30,17 @@ const QuizCard: FC<IQuizCardProps> = ({
           height={100}
           className="w-full object-cover"
         />
-        <div className="absolute top-1 right-1 z-10 rounded bg-black/60 px-2 py-1 text-xs font-semibold backdrop-blur-sm">
+        <div className="absolute top-1 right-1 z-2 rounded bg-black/60 px-2 py-1 text-xs font-semibold backdrop-blur-sm">
           {data.totalQuestions} {countLabel}
         </div>
       </div>
-      <h3 className="z-10 mb-1 truncate text-lg font-bold">{data.title}</h3>
-      <p className="z-10 mb-2 truncate text-xs text-zinc-500">
+      <h3 className="mb-1 truncate text-lg font-bold">{data.title}</h3>
+      <p className="mb-2 truncate text-xs text-zinc-500">
         Last edited: {data.updatedAt.toLocaleDateString()}
       </p>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         {data.category && (
-          <span className="bg-primary/50 flex-center h-5 rounded-full px-2 text-xs text-black">
+          <span className="bg-primary/50 flex-center h-5 truncate rounded-full px-2 text-xs text-black">
             {data.category}
           </span>
         )}

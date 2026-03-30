@@ -9,3 +9,4 @@ export * from './field';
 export * from './card';
 export * from './carousel';
 export * from './popover';
+export * from './select';
