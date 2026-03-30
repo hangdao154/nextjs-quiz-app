@@ -58,6 +58,35 @@ export const options = pgTable('options', {
   isCorrect: boolean('is_correct').notNull().default(false),
 });
 
+export const decks = pgTable('decks', {
+  id: serial('id').primaryKey(),
+  title: text('title').notNull(),
+  description: text('description'),
+  category: text('category').notNull(),
+  totalCards: integer('total_cards').notNull().default(0),
+  isPublic: boolean('is_public').notNull().default(false),
+  createdBy: uuid('created_by')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  isActive: boolean('is_active').notNull().default(true),
+});
+
+export const flashcards = pgTable('flashcards', {
+  id: serial('id').primaryKey(),
+  deckId: integer('deck_id')
+    .notNull()
+    .references(() => decks.id, { onDelete: 'cascade' }),
+  front: text('front').notNull(),
+  back: text('back'),
+  order: integer('order').notNull().default(0),
+});
+
 export const userAttempts = pgTable('user_attempts', {
   id: serial('id').primaryKey(),
   userId: uuid('user_id')
@@ -81,6 +110,7 @@ export const userAttempts = pgTable('user_attempts', {
 export const usersRelations = relations(users, ({ many }) => ({
   attempts: many(userAttempts),
   quizzesCreated: many(quizzes),
+  decksCreated: many(decks),
 }));
 
 export const quizzesRelations = relations(quizzes, ({ many, one }) => ({
@@ -104,6 +134,21 @@ export const optionsRelations = relations(options, ({ one }) => ({
   question: one(questions, {
     fields: [options.questionId],
     references: [questions.id],
+  }),
+}));
+
+export const decksRelations = relations(decks, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [decks.createdBy],
+    references: [users.id],
+  }),
+  cards: many(flashcards),
+}));
+
+export const flashcardsRelations = relations(flashcards, ({ one }) => ({
+  deck: one(decks, {
+    fields: [flashcards.deckId],
+    references: [decks.id],
   }),
 }));
 

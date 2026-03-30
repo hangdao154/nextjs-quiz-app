@@ -1,6 +1,6 @@
 'use client';
 
-import { IDashboardLibraryQuizDTO } from '@/types';
+import { IDashboardLibraryDeckDTO, IDashboardLibraryQuizDTO } from '@/types';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import { Button } from '@/components';
 import { ELibraryTab } from '@/enums';
 import { QuizCard } from '@/modules/quiz';
 import { fetchLibraryFlashcardsPage, fetchLibraryQuizzesPage } from '@/lib';
+import DeckCard from '../deck-card';
 
 const TAB_ITEMS: { id: ELibraryTab; label: string }[] = [
   { id: ELibraryTab.QUIZZES, label: 'Quizzes' },
@@ -16,7 +17,7 @@ const TAB_ITEMS: { id: ELibraryTab; label: string }[] = [
 
 interface ILibraryBrowserProps {
   initialTab: ELibraryTab;
-  initialItems: IDashboardLibraryQuizDTO[];
+  initialItems: IDashboardLibraryQuizDTO[] | IDashboardLibraryDeckDTO[];
   pageSize: number;
 }
 
@@ -25,7 +26,9 @@ const LibraryBrowser = ({
   initialItems,
   pageSize,
 }: ILibraryBrowserProps) => {
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState<
+    IDashboardLibraryQuizDTO[] | IDashboardLibraryDeckDTO[]
+  >(initialItems);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialItems.length === pageSize);
 
@@ -39,19 +42,22 @@ const LibraryBrowser = ({
     setLoading(true);
     try {
       const offset = items.length;
-      const next =
-        initialTab === 'quizzes'
-          ? await fetchLibraryQuizzesPage(offset, pageSize)
-          : await fetchLibraryFlashcardsPage(offset, pageSize);
-      setItems((prev) => [...prev, ...next]);
-      setHasMore(next.length === pageSize);
+      if (initialTab === ELibraryTab.QUIZZES) {
+        const next = await fetchLibraryQuizzesPage(offset, pageSize);
+        setItems((prev) => [...(prev as IDashboardLibraryQuizDTO[]), ...next]);
+        setHasMore(next.length === pageSize);
+      } else {
+        const next = await fetchLibraryFlashcardsPage(offset, pageSize);
+        setItems((prev) => [...(prev as IDashboardLibraryDeckDTO[]), ...next]);
+        setHasMore(next.length === pageSize);
+      }
     } finally {
       setLoading(false);
     }
-  }, [hasMore, initialTab, items, loading, pageSize]);
+  }, [hasMore, initialTab, items.length, loading, pageSize]);
 
   const emptyMessage =
-    initialTab === 'quizzes'
+    initialTab === ELibraryTab.QUIZZES
       ? 'You have not created any quizzes yet.'
       : 'You have not created any flashcard decks yet.';
 
@@ -80,14 +86,18 @@ const LibraryBrowser = ({
       ) : (
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {items.map((item) => (
-              <QuizCard
-                key={`${initialTab}-${item.id}`}
-                data={item}
-                hrefBase={initialTab === 'quizzes' ? '/quiz' : '/flashcard'}
-                countLabel={initialTab === 'quizzes' ? 'QUESTIONS' : 'CARDS'}
-              />
-            ))}
+            {initialTab === ELibraryTab.QUIZZES
+              ? (items as IDashboardLibraryQuizDTO[]).map((item) => (
+                  <QuizCard
+                    key={`quiz-${item.id}`}
+                    data={item}
+                    hrefBase="/quiz"
+                    countLabel="QUESTIONS"
+                  />
+                ))
+              : (items as IDashboardLibraryDeckDTO[]).map((item) => (
+                  <DeckCard key={`deck-${item.id}`} data={item} />
+                ))}
           </div>
 
           {hasMore && (

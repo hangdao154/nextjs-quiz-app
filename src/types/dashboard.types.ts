@@ -7,6 +7,16 @@ export interface IDashboardLibraryQuizDTO {
   updatedAt: Date;
 }
 
+export interface IDashboardLibraryDeckDTO {
+  id: number;
+  title: string;
+  category: string | null;
+  totalCards: number;
+  reviewProgress?: number;
+  updatedAt: Date;
+  createdAt: Date;
+}
+
 export interface IDashboardCommunityQuizDTO {
   id: number;
   title: string;

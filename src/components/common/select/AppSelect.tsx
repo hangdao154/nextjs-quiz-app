@@ -20,6 +20,7 @@ interface IAppSelectProps {
   triggerClassName?: string;
   contentClassName?: string;
   itemClassName?: string;
+  'aria-invalid'?: boolean;
 }
 
 const AppSelect: FC<IAppSelectProps> = ({
@@ -30,10 +31,14 @@ const AppSelect: FC<IAppSelectProps> = ({
   triggerClassName,
   contentClassName,
   itemClassName,
+  'aria-invalid': ariaInvalid,
 }) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className={cn(triggerClassName)}>
+      <SelectTrigger
+        className={cn(triggerClassName)}
+        aria-invalid={ariaInvalid}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className={cn(contentClassName)} position="popper">

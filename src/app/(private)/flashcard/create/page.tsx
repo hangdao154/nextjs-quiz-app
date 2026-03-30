@@ -4,14 +4,17 @@ import { FC } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Layers } from 'lucide-react';
-import { deckSchema } from '@/lib';
+import { createDeck, deckSchema } from '@/lib';
 import { TDeckFormValues } from '@/types';
 import { AppFormItem, AppSelect, Button, Input, Textarea } from '@/components';
 import { Flashcard } from '@/modules/flashcard';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const CreateDeckForm: FC = () => {
-  const { control, handleSubmit } = useForm<TDeckFormValues>({
+  const router = useRouter();
+
+  const form = useForm<TDeckFormValues>({
     resolver: zodResolver(deckSchema),
     defaultValues: {
       title: '',
@@ -24,18 +27,27 @@ const CreateDeckForm: FC = () => {
     },
   });
 
+  const { control, handleSubmit } = form;
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'cards',
   });
 
-  const onSubmit = (data: TDeckFormValues) => {
-    toast.success('Deck Created: ' + JSON.stringify(data));
-  };
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const result = await createDeck(data);
+      toast.success(result.message);
+      router.push(`/library?tab=flashcards`);
+    } catch (error) {
+      const message = (error as Error).message;
+      toast.error(message);
+    }
+  });
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
       className="mx-auto min-h-screen w-full max-w-5xl p-8 text-white"
     >
       {/* Header Section */}
@@ -67,11 +79,8 @@ const CreateDeckForm: FC = () => {
             <AppFormItem
               control={control}
               name="category"
-              label={
-                <span className="text-xs font-bold tracking-widest text-[#899775] uppercase">
-                  Category
-                </span>
-              }
+              classLabel="text-xs font-bold tracking-widest text-[#899775] uppercase"
+              label="Category"
             >
               <AppSelect
                 options={[
@@ -81,6 +90,7 @@ const CreateDeckForm: FC = () => {
                 ]}
                 placeholder="Science"
                 triggerClassName="dark:bg-accent-foreground border-zinc-700 py-5 text-white"
+                itemClassName="dark:hover:bg-primary-80 not-data-[variant=destructive]:focus:**:text-accent not-data-[variant=destructive]:aria-selected:**:text-primary"
               />
             </AppFormItem>
           </div>

@@ -13,6 +13,7 @@ interface IFormItemProps<T extends FieldValues> {
   description?: ReactNode;
   classWrapper?: string;
   classLabel?: string;
+  showError?: boolean;
 }
 
 const AppFormItem = <T extends FieldValues>({
@@ -23,6 +24,7 @@ const AppFormItem = <T extends FieldValues>({
   description,
   classWrapper,
   classLabel,
+  showError = true,
 }: IFormItemProps<T>) => {
   return (
     <Controller
@@ -56,7 +58,9 @@ const AppFormItem = <T extends FieldValues>({
             return null;
           })}
           {description && <FieldDescription>{description}</FieldDescription>}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && showError && (
+            <FieldError errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

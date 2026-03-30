@@ -1,9 +1,10 @@
 import { and, avg, count, desc, eq, ne, sql } from 'drizzle-orm';
 import { db } from '@/db/client';
-import { quizzes, userAttempts, users } from '@/db';
+import { decks, quizzes, userAttempts, users } from '@/db';
 import {
   IDashboardActivityStatsDTO,
   IDashboardCommunityQuizDTO,
+  IDashboardLibraryDeckDTO,
   IDashboardLibraryQuizDTO,
   IDashboardRecentAttemptDTO,
 } from '@/types';
@@ -51,13 +52,26 @@ export default class DashboardService {
    * Returns the same shape as library quizzes so `QuizCard` can render both.
    */
   static async getUserLibraryFlashcards(
-    _userId: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _limit = 5,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _offset = 0
-  ): Promise<IDashboardLibraryQuizDTO[]> {
-    return [];
+    userId: string,
+    limit = 5,
+    offset = 0
+  ): Promise<IDashboardLibraryDeckDTO[]> {
+    const rows = await db
+      .select({
+        id: decks.id,
+        title: decks.title,
+        category: decks.category,
+        totalCards: decks.totalCards,
+        updatedAt: decks.updatedAt,
+        createdAt: decks.createdAt,
+      })
+      .from(decks)
+      .where(eq(decks.createdBy, userId))
+      .orderBy(desc(decks.updatedAt))
+      .offset(offset)
+      .limit(limit);
+
+    return rows;
   }
 
   static async getCommunityQuizzes(
